@@ -1,0 +1,14 @@
+fluentd:
+  build: fluentd/
+  ports:
+    - '24224:24224'
+nginx:
+  build: web/
+  links:
+    - fluentd
+  ports:
+    - '80:80'
+  log_driver: 'fluentd'
+  log_opt:
+    fluentd-address: localhost:24224
+    fluentd-tag: docker.{{.FullID}}
